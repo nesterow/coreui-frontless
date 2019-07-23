@@ -1,0 +1,30 @@
+<page-400>
+  <div>
+    <h1>
+      <img src="/assets/media/icon.svg" class="icon"/>
+      400
+      <br>
+      <small>
+        Error
+      </small>
+    </h1>
+
+  </div>
+  <pre style="padding: 26px;">
+    { unescape(state.stack) }
+  </pre>
+  <script>
+    import {escape, unescape} from 'querystring'
+    export default {
+      state: {
+        stack: ''
+      },
+      unescape,
+      onMounted(props){
+        this.update({
+          stack: escape(props.stack)
+        })
+      }
+    }
+  </script>
+</page-400>

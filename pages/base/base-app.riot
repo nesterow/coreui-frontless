@@ -1,0 +1,29 @@
+<base-app>
+    <slot name="header"></slot>
+    <div class="app-body">
+        <slot name="sidebar"></slot>
+        <main class="main">
+            <slot name="breadcrumb" />
+            <div class="container-fluid">
+                <div id="ui-view">
+                    <div> <slot /> </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <slot name="aside"></slot>
+    <slot name="footer"></slot>
+    <script>
+        export default {
+            bodyClass: 'app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show'
+        }
+    </script>
+    <style>
+        :host {
+            display: contents;
+        }
+        :host .main::before {
+            position: fixed !important;
+        }
+    </style>
+</base-app>

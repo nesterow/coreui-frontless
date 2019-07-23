@@ -1,0 +1,42 @@
+<index-page>
+  <base-app>
+    <page-header slot="header"></page-header>
+    <div class="container">
+      <div class="row justify-content-center">
+        <a class="btn btn-lg btn-primary" href="/app">
+          Dashboard Demo
+        </a>
+      </div>
+    </div>
+  </base-app>
+  <script>
+    import BasePage from './base/base-app.riot'
+    import PageHeader from './base/page-header.riot'
+
+    export default () => ({
+      layout: 'base',
+      observe: ['title'],
+      title: "Home",
+      bodyClass: 'app flex-row align-items-center',
+      components: {
+        [BasePage.name] : BasePage,
+        [PageHeader.name]: PageHeader
+      },
+      onMounted() {
+        this.$store.dispatch({
+          type: "TITLE",
+          title: "Index page"
+        })
+      },
+      onAction(){
+        this.title = this.$state.title;
+        this.update()
+      },
+      onRendered(){
+        this.update({
+          username: this.globals.username
+        })
+      }
+    })
+  </script>
+</index-page>

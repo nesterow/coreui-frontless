@@ -1,0 +1,207 @@
+<register-page>
+  <base-page>
+    <page-header slot="header"> </page-header>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card mx-4">
+            <form class="card-body p-4" onsubmit={submit}>
+              <h1>Register</h1>
+              <p class="text-muted">Create your account</p>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="icon-user"></i></span></div>
+                <input onfocus={reset} onkeyup={checkName} name="username" autocomplete="off" class="form-control {state.errors.username ? 'is-invalid' : ''}" type="text" placeholder="Username" />
+                <div class="invalid-feedback">
+                  <p class="form-input-hint mb-0" each={error in state.errors.username}>{error}</p>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend"><span class="input-group-text">@</span></div>
+                <input onfocus={reset} onkeyup={checkEmail} name="email" autocomplete="off" class="form-control {state.errors.email ? 'is-invalid' : ''}" type="email" placeholder="Email" />
+                <div class="invalid-feedback">
+                  <p class="form-input-hint mb-0" each={error in state.errors.email}>{error}</p>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="icon-lock"></i></span></div>
+                <input onfocus={reset} class="form-control {state.errors.password ? 'is-invalid' : ''}" type="password" name="password" placeholder="Password" autocomplete="off"/>
+                <div class="invalid-feedback">
+                  <p class="form-input-hint mb-0" each={error in state.errors.password}>{error}</p>
+                </div>
+              </div>
+              <div class="input-group mb-4">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="icon-lock"></i></span></div>
+                <input onfocus={reset} class="form-control {state.errors.password2 ? 'is-invalid' : ''}" type="password" name="password2" placeholder="Repeat Password" autocomplete="off"/>
+                <div class="invalid-feedback">
+                  <p class="form-input-hint mb-0" each={error in state.errors.password2}>{error}</p>
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="switch switch-label switch-pill switch-success switch-sm float-right">
+                  <input onchange={reset} class="switch-input" name="agree" type="checkbox"/>
+                  <span class="switch-slider" data-checked="" data-unchecked=""></span>
+                  <p class="agree"> 
+                    Agree to our <a href="/tsc" target="_blank">Terms and Conditions</a>
+                  </p>
+                </label>
+              </div>
+              <div class="mb-4">
+                  <p class="hint mb-0" each={error in state.errors.agree}>
+                    <div class="arrow"></div>
+                    {error}
+                  </p>
+              </div>
+              <button class="btn btn-block btn-success" type="submit">Create Account</button>
+            </form>
+            <div class="card-footer p-4">
+              <div class="row">
+                <div class="col-6">
+                  <button class="btn btn-block btn-facebook" type="button"><span>facebook</span></button>
+                </div>
+                <div class="col-6">
+                  <button class="btn btn-block btn-twitter" type="button"><span>twitter</span></button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </base-page>
+
+  <script>
+    import BasePage from './base/base-page.riot'
+    import PageHeader from './base/page-header.riot'
+    import {serializeForm} from '@frontless/core'
+    import validate from 'validators/register.validate'
+    import {validators} from 'validate.js'
+    import {debounce} from 'lodash'
+
+    export default () => ({
+      id: 'signup-form',
+      bodyClass: 'app flex-row align-items-center',
+      components: {
+        [PageHeader.name]: PageHeader,
+        [BasePage.name]: BasePage
+      },
+      state: {
+        errors:{},
+        success: false,
+      },
+      onRendered(){
+        if (this.globals.authenticated) {
+          this.redirect('/profile')
+        }
+      },
+      
+      onMounted() {
+        this.checkName = debounce(this.checkName.bind(this), 600)
+        this.checkEmail = debounce(this.checkEmail.bind(this), 600)
+      },
+
+      checkName(ev) {
+        const {value} = ev.target
+        this.service('users').get(value).then(res => {
+          this.update({
+            errors: res.exists ? {
+              username: ["This username is already taken"]
+            } : {}
+          })
+        })
+      },
+
+      checkEmail(ev) {
+        const {value} = ev.target;
+        if (!validators.email.PATTERN.test(value))
+          return;
+        this.service('users/check-email').get(value).then(res => {
+          this.update({
+            errors: res.exists ? {
+              email: ["User with this email already exists"]
+            } : {}
+          })
+        })
+      },
+
+      submit(ev) {
+        ev.preventDefault()
+        const data = serializeForm(ev.target)
+        
+        const errors = validate(data)
+        console.log(data, errors)
+        
+        if (errors) {
+          return this.update({
+            errors,
+          })
+        }
+        
+        const Users = this.service('users')
+        const payload = serializeForm(ev.target)
+
+        Users.create(data).
+        
+        then((res)=>{
+          const {data} = res;
+          
+          if (data && data.errors) 
+            return;
+
+          ev.target.reset();
+          this.redirect('/login')
+        
+        }).
+
+        catch((err) => {
+          this.update({
+            errors: {
+              agree: ["Server error. Please try later."]
+            },
+          })
+        })
+
+      },
+
+      reset(){
+        this.update({
+          errors:{}
+        })
+      }
+    })
+
+  </script>
+
+  <style>
+    :host .agree{
+      display: inline-block;
+      position: absolute;
+      left: 50px;
+      top: 0;
+    }
+    :host .switch-slider[data-unchecked]{
+      border: 1px solid #00e827;
+    }
+    :host .switch-slider[data-unchecked]::before {
+      border: 1px solid #00ff0866;
+    }
+    :host .hint {
+      position: relative;
+      border: 4px solid #d2d2d2;
+      border-radius: 16px;
+      padding: 16px;
+      color: #888;
+    }
+    :host .arrow::before {
+      position: absolute;
+      display: block;
+      content: "";
+      border-color: transparent;
+      border-style: solid;
+      border-width: 0 .5rem .5rem .5rem;
+      top: -9px;
+      margin-left: calc(50% - 1.5rem);
+      border-bottom-color: #d2d2d2;
+    }
+  </style>
+  
+</register-page>

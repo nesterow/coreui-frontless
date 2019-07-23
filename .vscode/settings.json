@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.jss": "javascript"
+  },
+  "search.exclude": {
+  "**/node_modules": false
+  }
+}

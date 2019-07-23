@@ -1,0 +1,42 @@
+<page-header>
+    <header class="fixed-header app-header navbar">
+        <ul class="nav navbar-nav d-md-down-none">
+            <li class="nav-item px-3">
+                <a class="nav-link" href="/">
+                    <i class="icon-home"></i> Home
+                </a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav ml-auto mr-26">
+            <li class="nav-item d-md-down-none">
+                <a class="nav-link" href="/login" if={!state.user.username}>
+                    <i class="icon-login"></i> Login
+                </a>
+                <a class="nav-link" href="/app" if={state.user.username}>
+                    <i class="icon-user"></i> Welcome, {state.user.username}!
+                </a>
+            </li>
+        </ul>
+    </header>
+    <script>
+        import userMixin from 'mixins/user' 
+        export default () => ({
+            state: {
+                user: {}
+            },
+            ...userMixin(),
+        })
+    </script>
+    <style>
+        :host .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 70px;
+            width: 100vw;
+        }
+        :host .mr-26 {
+            margin-right: 26px;
+        }
+    </style>
+</page-header>

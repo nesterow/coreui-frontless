@@ -1,0 +1,32 @@
+<app>
+    <base-app>
+        <app-header slot="header"></app-header>
+        <app-sidebar slot="sidebar"></app-sidebar>
+        <app-aside slot="aside"></app-aside>
+        <app-breadcrumb slot="breadcrumb"></app-breadcrumb>
+        <slot />
+    </base-app>
+
+    <script>
+        import BaseApp from './base-app.riot'
+        import AppSidebar from './app-sidebar.riot'
+        import AppHeader from './app-header.riot'
+        import AppAside from './app-aside.riot'
+        import AppBreadcrumb from './app-breadcrumb.riot'
+        
+        export default () => ({
+            access: {
+                loggedIn: true,
+            },
+            components: {
+                [BaseApp.name]: BaseApp,
+                [AppSidebar.name]: AppSidebar,
+                [AppHeader.name]: AppHeader,
+                [AppAside.name]: AppAside,
+                [AppBreadcrumb.name]: AppBreadcrumb
+            },
+
+
+        })
+    </script>
+</app>
