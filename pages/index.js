@@ -3,9 +3,9 @@ window.$ = $;
 import 'vendor'
 import start from '@frontless/core/start'
 
-document.addEventListener('turbolinks:load', () => {
-  $(document).off('click')
-})
+// document.addEventListener('turbolinks:load', () => {
+//   $(document).off('click')
+// })
 
 const PAGES = require('./**/*.riot', {mode: 'list'});
 const MODULES = require('../components/**/*.riot', {mode: 'list'});

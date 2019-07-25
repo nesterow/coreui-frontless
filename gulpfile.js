@@ -101,7 +101,7 @@ gulp.task('default', async function(done){
       delay: 100,
       ignoreWatch: ['**/node_modules/**', '**/assets/**'],
     })
-    .plugin(hmr)
+    // .plugin(hmr)
     .transform(babelify.configure({
       presets: ["@babel/preset-env"]
     }))
