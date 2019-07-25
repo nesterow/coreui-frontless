@@ -13,6 +13,7 @@ Features [CoreUI 2](https://github.com/coreui/coreui) and User Authentication.
 
 Some components from CoreUI will be ported to Riot.JS, however this template will always rely on JQuery and Bootstrap 4.
 
+![CoreUI](https://camo.githubusercontent.com/c274908af25138712c77b543fd4edc23452930e4/68747470733a2f2f636f726575692e696f2f6173736574732f696d672f6578616d706c652d636f75726575692e6a7067)
 
 -----------------------------
 ### ❤️ Contribute
