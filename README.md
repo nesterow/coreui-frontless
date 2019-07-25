@@ -1,15 +1,15 @@
-## Frontless + CoreUI 2 Dashboard
+# Frontless + CoreUI 2 Dashboard
 
 A starting point with [Frontless](https://frontless.js.org/) and Bootstrap4 based user interfaces.
 Features [CoreUI 2](https://github.com/coreui/coreui) and User Authentication.
 
-### Features
+## Features
 
 - User registration/login
 - CoreUI Application Layout
 - Bootstrap4 + JQuery
 
-### Goals
+## Goals
 
 Some components from CoreUI will be ported to Riot.JS, however this template will always rely on JQuery and Bootstrap 4.
 
